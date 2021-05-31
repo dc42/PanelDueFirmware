@@ -12,8 +12,8 @@
 #include "PanelDue.hpp"
 #include "FileManager.hpp"
 #include <UI/MessageLog.hpp>
-#include "Library/Misc.hpp"
 #include "Icons/Icons.hpp"
+#include "Library/Misc.hpp"
 #include "Hardware/Buzzer.hpp"
 #include "Hardware/Reset.hpp"
 #include "Hardware/SerialIo.hpp"
@@ -32,6 +32,8 @@ TextField *fwVersionField, *userCommandField, *ipAddressField;
 IntegerField *freeMem;
 StaticTextField *touchCalibInstruction, *debugField;
 StaticTextField *messageTextFields[numMessageRows], *messageTimeFields[numMessageRows];
+
+static const ColourScheme *colours;
 
 // Private fields
 class AlertPopup;
@@ -1211,6 +1213,11 @@ namespace UI
 		return NumLanguages;
 	}
 
+	void InitColourScheme(const ColourScheme *scheme)
+	{
+		colours = scheme;
+	}
+
 	// Create all the fields we ever display
 	void CreateFields(uint32_t language, const ColourScheme& colours, uint32_t p_infoTimeout)
 	{
@@ -1722,10 +1729,6 @@ namespace UI
 		}
 #endif
 
-		if (currentTab == tabMsg)
-		{
-			MessageLog::UpdateMessages(false);
-		}
 		if (alertTicks != 0 && SystemTick::GetTickCount() - whenAlertReceived >= alertTicks)
 		{
 			ClearAlertOrResponse();
